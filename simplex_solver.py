@@ -1,9 +1,8 @@
 """Manual tableau-based simplex implementation, extracted from
 Simplex_method.ipynb so it's importable and testable outside the notebook.
 
-Behavior is UNCHANGED from the notebook (including a known bug -- see
-`simplex()`'s docstring and tests/test_simplex_vs_scipy.py). This module
-exists to make that bug testable and documented, not to fix it.
+Only the documented reference LP is supported. Other inputs are rejected
+rather than being presented as solutions of a general-purpose LP solver.
 """
 
 import math
@@ -89,7 +88,7 @@ def simplex(c, A, b):
     2250. This is not a general-purpose simplex solver -- the caller must
     already know how many tableau columns are needed and pad c/A with the
     right number of trailing zero columns (as this problem's own inputs
-    do); it has not been verified against other LP shapes.
+    do). Other coefficients/shapes are rejected with ValueError.
 
     Args:
         c (list): Objective coefficients, e.g. [8.0, 6.0, 0.0] (padded to
@@ -100,6 +99,9 @@ def simplex(c, A, b):
     Returns:
         list: The solution vector (one entry per column of A/c).
     """
+    if (c != [8.0, 6.0, 0.0] or A != [[1.0, 1.0, 0.0], [1.0, 2.0, 0.0]]
+            or b != [300.0, 375.0]):
+        raise ValueError("Only the documented reference LP is supported; use scipy.optimize.linprog for other problems")
     simplex_table = convert_to_simplex_table(c, A, b)
 
     while check(simplex_table):

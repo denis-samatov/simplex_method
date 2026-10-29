@@ -64,7 +64,7 @@ bnd = [(0, float("inf")),
 
 opt_ans = linprog(c=obj, A_ub=left_side_ineq, b_ub=right_side_ineq,
                   A_eq=left_side_eq, b_eq=right_side_eq, bounds=bnd,
-                  method="revised simplex")
+                  method="highs")
 
 opt_ans
 ```
@@ -92,7 +92,7 @@ b = [300.0, 375.0]
 x, y, _ = simplex(c, A, b)
 ```
 
-Note this isn't a general-purpose LP solver: the caller has to already know how many tableau columns are needed and pad `c`/`A` accordingly (as above), and it has only been verified against this one problem.
+Note this isn't a general-purpose LP solver: the caller has to already know how many tableau columns are needed and pad `c`/`A` accordingly (as above), and only this exact reference LP is supported. Other coefficients or shapes raise `ValueError`; use SciPy HiGHS for other LPs.
 
 ## Result Images for Manual Implementation
 

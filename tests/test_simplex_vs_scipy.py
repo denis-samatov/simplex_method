@@ -48,3 +48,12 @@ def test_manual_simplex_matches_scipy_optimum():
     x, y, _ = simplex(C, A, B)
 
     assert np.array([x, y]) == pytest.approx(SCIPY_RESULT.x, abs=1e-6)
+
+
+@pytest.mark.parametrize("c, A, b", [
+    ([0.0, 0.0, 0.0], A, B),
+    (C, A, [300.0, 374.0]),
+])
+def test_reference_solver_rejects_unsupported_lp(c, A, b):
+    with pytest.raises(ValueError, match="reference LP"):
+        simplex(c, A, b)
